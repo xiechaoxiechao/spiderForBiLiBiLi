@@ -118,7 +118,6 @@ console.log('开始页面索引…');
 var begin = function (start) {
     ep.after('done', 8, function (num) {
         begin(start + 8);
-
     })
     var q = 0;
     for (var i = start; i <= pageCount; i++) {
@@ -173,7 +172,6 @@ var begin = function (start) {
                             for (let i = 1; i <= nowCount; i++) {
                                 readyTips[i] = "#";
                             }
-
                             console.log(readyTips.toString().replace(/\,/g, ''));
                         }
                         ep.emit('done');
@@ -189,9 +187,7 @@ var begin = function (start) {
                 }
             }
         })
-
     }
-
 }
 begin(1);
 function createDir(arr) {
@@ -216,14 +212,12 @@ function createDir(arr) {
                             getImgUrl(arr, downloadDir);
                         }
                     }
-
                 });
             }
         } else {
             console.log('文件夹创建失败！')
         }
     }); //创建与当前时间有关的文件夹
-
 }
 var fs = require('fs');
 var cheerio = require('cheerio');
