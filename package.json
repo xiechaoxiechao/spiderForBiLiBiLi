@@ -1,0 +1,13 @@
+{
+  "name": "pa",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "eventproxy": "^1.0.0",
+    "reequest": "^0.0.1-security",
+    "request": "^2.88.2",
+    "superagent": "^5.2.2"
+  }
+}
