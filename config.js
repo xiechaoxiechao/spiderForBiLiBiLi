@@ -55,9 +55,9 @@ function Config(){
     /*
     控制是否间断性暂停
       1 => 是
-      2 => 否
+      0 => 否
     */
-    this.globalDelay=1
+    this.globalDelay=0
 
 
 }
