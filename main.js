@@ -108,12 +108,21 @@ var userAgent = [
     'User-Agent:Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20130331 Firefox/21.0',
     'User-Agent:Mozilla/5.0 (Windows NT 6.2; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0',
     'User-Agent:Opera/9.80 (Windows NT 6.1; WOW64; U; en) Presto/2.10.229 Version/11.62'
-]
+];
+var getId=function(){
+    return (
+        Math.floor(Math.random()*(10-255)+255)+'.'
+        +Math.floor(Math.random()*(10-255)+255)+'.'
+        +Math.floor(Math.random()*(10-255)+255)+'.'
+        +Math.floor(Math.random()*(10-255)+255)
+    )
+};
 var tips = '[==================================================]';
 var readyTips = tips.split('');
 console.log('开始页面索引…');
 var begin = function (start) {
     ep.after('done', 8, function (num) {
+        
         begin(start + 8);
     })
     var q = 0;
@@ -132,10 +141,13 @@ var begin = function (start) {
                 'Accept-Language': 'zh-CN',
                 'Cache-Control': 'max-age=0',
                 'Host': 'search.bilibili.com',
-                'User-Agent': user_agent
+                // 'User-Agent': user_agent,
+                // 'X-Forwarded-For':getId()
             }
         }, function (err, res, body) {
+           
             if (err) {
+                
                 failCount++;
                 console.log('连接错误[' + failCount + ']!');
                 var percent = Math.floor(((doneCount + failCount) / pageCount) * 50);
@@ -156,6 +168,7 @@ var begin = function (start) {
                 }
                 ep.emit('done');
             } else {
+                
                 var type = 'getSingleTypeList-jump-category_id-' + aimZone + '-keyword-' + config.searchKey + '-order-' + orderType + '-search_type-' + searchAim;
                 var $ = cheerio.load(body);
                 var data = JSON.parse($('script')[7].children[0].data.slice(25, -122)).flow[type].result;
@@ -171,7 +184,9 @@ var begin = function (start) {
                             }
                             console.log(readyTips.toString().replace(/\,/g, ''));
                         }
+                        
                         ep.emit('done');
+                        
                     }
                 }
                 add++;
@@ -275,7 +290,8 @@ var getImgUrl = function (idArr, downloadDir) {
                     'Accept': 'text/html, application/xhtml+xml, application/xml; q=0.9, */*; q=0.8',
                     'Accept-Language': 'zh-CN',
                     'Connection': 'Keep-Alive',
-                    'User-Agent': user_agent
+                    'User-Agent': user_agent,
+                    'X-Forwarded-For':getId()
                 }
             }, function (err, res, body) {
                 if (config.aimSection == 2) {
@@ -388,7 +404,8 @@ var download = function (url, path, dirPath) {
                     'Accept-Language': 'zh-CN',
                     'Connection': 'Keep-Alive',
                     'Host': 'i0.hdslb.com',
-                    'User-Agent': user_agent
+                    'User-Agent': user_agent,
+                    'X-Forwarded-For':getId()
                 }
             });
             internetStream.pipe(fileStream);
