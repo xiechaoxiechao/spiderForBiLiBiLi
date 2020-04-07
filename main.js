@@ -7,7 +7,7 @@ var Config = require('./config');
 var config = new Config();
 var fs = require('fs');
 var eventProxy = require('eventproxy');
-var ep = new eventProxy();
+
 var pageCount = config.pageCount;
 var failCount = 0;
 var doneCount = 0;
@@ -121,10 +121,10 @@ var tips = '[==================================================]';
 var readyTips = tips.split('');
 console.log('开始页面索引…');
 var begin = function (start) {
+    var ep = new eventProxy();
     ep.after('done', 8, function (num) {
-        
         begin(start + 8);
-    })
+    });
     var q = 0;
     for (var i = start; i <= pageCount; i++) {
         if (q >= 8) {
@@ -134,6 +134,7 @@ var begin = function (start) {
         var aimUrl = 'https://search.bilibili.com/' + searchAim + '?keyword=' + searchKey + '&order=' + orderType + '&category_id=' + aimZone + '&page=' + i;
         var random = Math.floor(Math.random() * 11);
         var user_agent = userAgent[random];
+        var getID=getId();
         request({
             url: aimUrl,
             headers: {
@@ -141,8 +142,7 @@ var begin = function (start) {
                 'Accept-Language': 'zh-CN',
                 'Cache-Control': 'max-age=0',
                 'Host': 'search.bilibili.com',
-                // 'User-Agent': user_agent,
-                // 'X-Forwarded-For':getId()
+                'X-Forwarded-For':getID
             }
         }, function (err, res, body) {
            
@@ -290,15 +290,14 @@ var getImgUrl = function (idArr, downloadDir) {
                     'Accept': 'text/html, application/xhtml+xml, application/xml; q=0.9, */*; q=0.8',
                     'Accept-Language': 'zh-CN',
                     'Connection': 'Keep-Alive',
-                    'User-Agent': user_agent,
                     'X-Forwarded-For':getId()
                 }
             }, function (err, res, body) {
                 if (config.aimSection == 2) {
                     var data = JSON.parse(body).data.item.pictures;
                     for (let j = 0; j < data.length; j++) {
-                        dirArr.push(idArr[i]);
-                        urlArr.push(data[j].img_src);
+                        dirArr.unshift(idArr[i]);
+                        urlArr.unshift(data[j].img_src);
                     }
                     haveDone++;
                     if (witch == 1 && haveDone == finDone) {
@@ -322,7 +321,7 @@ var getImgUrl = function (idArr, downloadDir) {
                     $('div.article-holder figure img').each((ind, ele) => {
                         var readyUrl = $(ele).attr('data-src');
                         if (readyUrl.match('1e610b682b8636764fe50ed.png') == null) {
-                            if (readyUrl.match('https') == null) {
+                            if (readyUrl.match('http') == null) {
                                 var realUrl = "https:" + readyUrl;
                             }
                             dirArr.push(idArr[i]);
@@ -370,7 +369,7 @@ var download = function (url, path, dirPath) {
     var model = config.aimSection;
     var maxConnectCount = config.maxConnectCount;
     var downloadDelay = config.downloadDelay;
-    var control = Math.round(Math.floor(url.length / maxConnectCount) / 4);
+    var control = Math.round(Math.floor(url.length / maxConnectCount) / 25);
     var successCount = 0;
     var failCount = 0;
     var doneCount = 0;

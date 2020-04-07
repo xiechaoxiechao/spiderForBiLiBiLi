@@ -6,9 +6,9 @@ function Config(){
     2  => 相簿
     默认专栏
     */
-    this.aimSection=1,
+    this.aimSection=2,
     //检索页数，一般一页包含20个项目
-    this.pageCount=50,
+    this.pageCount=2,
     /*
     搜索排序方式 
       if(目标板块为专栏){
@@ -47,17 +47,17 @@ function Config(){
     /*
     最大下载连接数
     */
-    this.maxConnectCount=5,
+    this.maxConnectCount=8,
     /*
     下载批次延时
     */
-    this.downloadDelay=700,
+    this.downloadDelay=200,
     /*
     控制是否间断性暂停
       1 => 是
       0 => 否
     */
-    this.globalDelay=1
+    this.globalDelay=0
 
 
 }
